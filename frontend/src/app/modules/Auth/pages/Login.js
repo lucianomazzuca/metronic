@@ -18,16 +18,16 @@ import { login } from "../_redux/authCrud";
 */
 
 const initialValues = {
-  username: "",
-  password: "",
+  email: "admin@demo.com",
+  password: "demo",
 };
 
 function Login(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const LoginSchema = Yup.object().shape({
-    username: Yup.string()
-      .username("Wrong username format")
+    email: Yup.string()
+      .email("Wrong email format")
       .min(3, "Minimum 3 symbols")
       .max(50, "Maximum 50 symbols")
       .required(
@@ -71,10 +71,10 @@ function Login(props) {
     onSubmit: (values, { setStatus, setSubmitting }) => {
       enableLoading();
       setTimeout(() => {
-        login(values.username, values.password)
-          .then(({ data }) => {
+        login(values.email, values.password)
+          .then(({ data: { accessToken } }) => {
             disableLoading();
-            props.login(data);
+            props.login(accessToken);
           })
           .catch(() => {
             disableLoading();
@@ -122,17 +122,17 @@ function Login(props) {
 
         <div className="form-group fv-plugins-icon-container">
           <input
-            placeholder="User name"
-            type="username"
+            placeholder="Email"
+            type="email"
             className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
-              "username"
+              "email"
             )}`}
-            name="username"
-            {...formik.getFieldProps("username")}
+            name="email"
+            {...formik.getFieldProps("email")}
           />
-          {formik.touched.username && formik.errors.username ? (
+          {formik.touched.email && formik.errors.email ? (
             <div className="fv-plugins-message-container">
-              <div className="fv-help-block">{formik.errors.username}</div>
+              <div className="fv-help-block">{formik.errors.email}</div>
             </div>
           ) : null}
         </div>
