@@ -13,7 +13,7 @@ namespace backend.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("users")]
     public class UserController : ControllerBase
     {
         private IUserService _userService;

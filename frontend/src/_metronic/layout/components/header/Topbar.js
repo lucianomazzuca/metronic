@@ -9,7 +9,7 @@ import { UserNotificationsDropdown } from "../extras/dropdowns/UserNotifications
 import { QuickActionsDropdown } from "../extras/dropdowns/QuickActionsDropdown";
 import { MyCartDropdown } from "../extras/dropdowns/MyCartDropdown";
 import { LanguageSelectorDropdown } from "../extras/dropdowns/LanguageSelectorDropdown";
-import { QuickUserToggler } from "../extras/QuiclUserToggler";
+// import { QuickUserToggler } from "../extras/QuiclUserToggler";
 
 export function Topbar() {
   const uiService = useHtmlClassService();
@@ -79,7 +79,7 @@ export function Topbar() {
 
       {layoutProps.viewLanguagesDisplay && <LanguageSelectorDropdown />}
 
-      {layoutProps.viewUserDisplay && <QuickUserToggler />}
+      {/* {layoutProps.viewUserDisplay && <QuickUserToggler />} */}
     </div>
   );
 }

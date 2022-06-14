@@ -74,11 +74,11 @@ namespace backend
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
 
             // Global cors
             app.UseCors(x => x
                 .SetIsOriginAllowed(origin => true)
+                // .WithOrigins("http://localhost:3000")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
