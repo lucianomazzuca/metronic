@@ -17,8 +17,8 @@ namespace backend.Models
         public AuthenticateResponse(User user, string jwtToken, string refreshToken)
         {
             Id = user.Id;
-            UserName = user.Name;
-            Domain = user.Domain;
+            UserName = user.Usuario;
+            Domain = user.Dominio;
             IsAdmin = user.IsAdmin;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;

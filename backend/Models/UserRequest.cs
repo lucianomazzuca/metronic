@@ -5,9 +5,9 @@ namespace backend.Models
     public class UserRequest
     {
         [Required]
-        public string Name { get; set; }
+        public string Usuario { get; set; }
         [Required]
-        public string Domain { get; set; }
+        public string Dominio { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
     }

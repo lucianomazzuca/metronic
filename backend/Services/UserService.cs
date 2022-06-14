@@ -49,7 +49,7 @@ namespace backend.Services
 
                 if (isValid == false) return null;
 
-                var user = _context.Users.SingleOrDefault(x => x.Name == model.Username && x.Domain == _appSettings.Domain);
+                var user = _context.Users.SingleOrDefault(x => x.Usuario == model.Username && x.Dominio == _appSettings.Domain);
                 
                 // return null if user not found
                 if (user == null) return null;
@@ -128,7 +128,7 @@ namespace backend.Services
         public IEnumerable<User> GetAll()
         {
             return _context.Users
-                .OrderBy(u => u.Name)
+                .OrderBy(u => u.Usuario)
                 .ToList();
         }
 
@@ -140,8 +140,8 @@ namespace backend.Services
         public User Create(UserRequest user)
         {
             User _user = new User();
-            _user.Name = user.Name;
-            _user.Domain = user.Domain;
+            _user.Usuario = user.Usuario;
+            _user.Dominio = user.Dominio;
             _user.IsAdmin = user.IsAdmin;
             
             _context.Users.Add(_user);  
