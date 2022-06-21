@@ -32,7 +32,7 @@ namespace backend.Controllers
                 var response = _userService.Authenticate(model, ipAddress());
 
                 if (response == null)
-                    return BadRequest(new { message = "Username or password is incorrect" });
+                    return BadRequest(new { message = "Usuario o contraseña incorrectos" });
 
                 setTokenCookie(response.RefreshToken);
 
@@ -41,8 +41,8 @@ namespace backend.Controllers
             catch (Exception e)
             {
                 var error = e.Message;
+                return BadRequest(new { message = "Error en el servidor" });
             }
-            return null;
         }
 
         [AllowAnonymous]

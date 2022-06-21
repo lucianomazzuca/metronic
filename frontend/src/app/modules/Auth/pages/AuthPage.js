@@ -9,6 +9,8 @@ import Login from "./Login";
 import "../../../../_metronic/_assets/sass/pages/login/classic/login-1.scss";
 
 export function AuthPage() {
+  const today = new Date().getFullYear();
+
   return (
     <>
       <div className="d-flex flex-column flex-root">
@@ -31,7 +33,7 @@ export function AuthPage() {
                 <img
                   alt="Logo"
                   className="max-h-70px"
-                  src={toAbsoluteUrl("/media/logos/logo-letter-1.png")}
+                  src={toAbsoluteUrl("/media/logos/logo-auth.png")}
                 />
               </Link>
               {/* end:: Aside header */}
@@ -39,11 +41,10 @@ export function AuthPage() {
               {/* start:: Aside content */}
               <div className="flex-column-fluid d-flex flex-column justify-content-center">
                 <h3 className="font-size-h1 mb-5 text-white">
-                  Welcome to Metronic!
+                  Bienvenido
                 </h3>
                 <p className="font-weight-lighter text-white opacity-80">
-                  The ultimate Bootstrap & React 16 admin theme framework for
-                  next generation web apps.
+                  Aplicación base 
                 </p>
               </div>
               {/* end:: Aside content */}
@@ -51,18 +52,15 @@ export function AuthPage() {
               {/* start:: Aside footer for desktop */}
               <div className="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
                 <div className="opacity-70 font-weight-bold	text-white">
-                  &copy; 2020 Metronic
-                </div>
-                <div className="d-flex">
-                  <Link to="/terms" className="text-white">
-                    Privacy
-                  </Link>
-                  <Link to="/terms" className="text-white ml-10">
-                    Legal
-                  </Link>
-                  <Link to="/terms" className="text-white ml-10">
-                    Contact
-                  </Link>
+                  <span className="text-white font-weight-bold mr-2">{today.toString()} &copy;{" "} </span>
+                  <a
+                    href="http://www.solutica.com.ar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-hover-white"
+                  >
+                    Solutica
+                  </a>
                 </div>
               </div>
               {/* end:: Aside footer for desktop */}

@@ -5,6 +5,7 @@ import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers";
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 export function AsideMenuList({ layoutProps }) {
   const location = useLocation();
@@ -1789,6 +1790,20 @@ export function AsideMenuList({ layoutProps }) {
           </div>
         </li>
         {/*end::1 Level*/}
+        <li
+          style={{bottom: '0px', width: '100%'}}
+          className={`pb-5 menu-item ${getMenuItemActive("/logout", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/logout">
+            <span className="svg-icon menu-icon">
+              <PowerSettingsNewIcon/>
+            </span>
+            <span className="menu-text">
+              Cerrar Sesión
+            </span>
+          </NavLink>
+        </li>
       </ul>
 
       {/* end::Menu Nav */}

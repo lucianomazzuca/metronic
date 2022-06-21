@@ -27,16 +27,15 @@ function Login(props) {
   const [loading, setLoading] = useState(false);
   const LoginSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, "Minimum 3 symbols")
-      .max(50, "Maximum 50 symbols")
+      .min(3, "Ingresar un minimo de 3 caracteres")
+      .max(50, "Ingresar un máximo de 50 caracteres")
       .required(
         intl.formatMessage({
           id: "AUTH.VALIDATION.REQUIRED_FIELD",
         })
       ),
     password: Yup.string()
-      .min(3, "Minimum 3 symbols")
-      .max(50, "Maximum 50 symbols")
+      .max(50, "Ingresar un máximo de 50 caracteres")
       .required(
         intl.formatMessage({
           id: "AUTH.VALIDATION.REQUIRED_FIELD",
@@ -68,12 +67,10 @@ function Login(props) {
     initialValues,
     validationSchema: LoginSchema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
-      debugger;
       enableLoading();
       setTimeout(() => {
         login(values.username, values.password)
           .then(({ data }) => {
-            alert(JSON.stringify(data));
             disableLoading();
             props.login(data);
           })
@@ -81,14 +78,23 @@ function Login(props) {
             console.error(e)
             disableLoading();
             setSubmitting(false);
-            setStatus(
-              intl.formatMessage({
-                id: "AUTH.VALIDATION.INVALID_LOGIN",
-              })
-            );
+            if (e.response.status == 400) {
+              setStatus(
+                intl.formatMessage({
+                  id: "AUTH.VALIDATION.INVALID_LOGIN",
+                })
+              );
+            }
+            else {
+              setStatus(
+                intl.formatMessage({
+                  id: "Error",
+                })
+              );
+            }
           });
       }, 1000);
-      
+
     },
   });
 
@@ -100,7 +106,7 @@ function Login(props) {
           <FormattedMessage id="AUTH.LOGIN.TITLE" />
         </h3>
         <p className="text-muted font-weight-bold">
-          Enter your username and password
+          Ingrese su usuario y contraseña
         </p>
       </div>
       {/* end::Head */}
@@ -111,9 +117,15 @@ function Login(props) {
         className="form fv-plugins-bootstrap fv-plugins-framework"
       >
 
+        {formik.status ? (
+          <div className="mb-10 alert alert-custom alert-light-danger alert-dismissible">
+            <div className="alert-text font-weight-bold">{formik.status}</div>
+          </div>
+        ) : null}
+
         <div className="form-group fv-plugins-icon-container">
           <input
-            placeholder="Username"
+            placeholder="Usuario"
             type="text"
             className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
               "email"
@@ -129,7 +141,7 @@ function Login(props) {
         </div>
         <div className="form-group fv-plugins-icon-container">
           <input
-            placeholder="Password"
+            placeholder="Contraseña"
             type="password"
             className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
               "password"
@@ -144,20 +156,20 @@ function Login(props) {
           ) : null}
         </div>
         <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
-          <Link
+          {/* <Link
             to="/auth/forgot-password"
             className="text-dark-50 text-hover-primary my-3 mr-2"
             id="kt_login_forgot"
           >
             <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" />
-          </Link>
+          </Link> */}
           <button
             id="kt_login_signin_submit"
             type="submit"
             disabled={formik.isSubmitting}
             className={`btn btn-primary font-weight-bold px-9 py-4 my-3`}
           >
-            <span>Sign In</span>
+            <span>Ingresar</span>
             {loading && <span className="ml-3 spinner spinner-white"></span>}
           </button>
         </div>

@@ -43,21 +43,18 @@ export function Layout({ children }) {
                     {layoutProps.asideDisplay && (<Aside/>)}
                     {/*begin::Wrapper*/}
                     <div className="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-                        <Header/>
+                        {/* <Header/> */}
                         {/*begin::Content*/}
                         <div
                             id="kt_content"
                             className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
                         >
-                            {layoutProps.subheaderDisplay && <SubHeader/>}
-                            {/*begin::Entry*/}
+                            {/* {layoutProps.subheaderDisplay && <SubHeader/>} */}
                             {!layoutProps.contentExtended && (
                                 <div className="d-flex flex-column-fluid">
-                                    {/*begin::Container*/}
                                     <div className={layoutProps.contentContainerClasses}>
                                         {children}
                                     </div>
-                                    {/*end::Container*/}
                                 </div>
                             )}
 
@@ -70,6 +67,7 @@ export function Layout({ children }) {
                     {/*end::Wrapper*/}
                 </div>
                 {/*end::Page*/}
+                
             </div>
             {/* <QuickUser/> */}
             <QuickPanel/>
