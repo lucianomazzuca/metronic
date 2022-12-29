@@ -1,10 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 import { BuilderPage } from "./pages/BuilderPage";
 import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import Can from './config/Can';
+import { connect } from 'react-redux'
 
 const GoogleMaterialPage = lazy(() =>
   import("./modules/GoogleMaterialExamples/GoogleMaterialPage")
@@ -19,11 +20,16 @@ const UserProfilepage = lazy(() =>
   import("./modules/UserProfile/UserProfilePage")
 );
 
-export default function BasePage() {
+function BasePage(props) {
   // useEffect(() => {
   //   console.log('Base page');
   // }, []) // [] - is required if you need only one call
   // https://reactjs.org/docs/hooks-reference.html#useeffect
+
+  useEffect(() => {
+    debugger;
+    console.log(props.user)
+  }, [])
 
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
@@ -44,3 +50,10 @@ export default function BasePage() {
     </Suspense>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+  }
+}
+
+export default connect(mapStateToProps)(BasePage)

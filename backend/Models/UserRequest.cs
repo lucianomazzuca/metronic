@@ -7,7 +7,7 @@ namespace backend.Models
         [Required]
         public string Usuario { get; set; }
         [Required]
-        public string Dominio { get; set; }
+        public string Password { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
     }

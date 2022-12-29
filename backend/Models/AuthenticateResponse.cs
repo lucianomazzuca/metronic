@@ -7,7 +7,7 @@ namespace backend.Models
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Domain { get; set; }
+        public string Password { get; set; }
         public bool IsAdmin { get; set; }
         public string JwtToken { get; set; }
 
@@ -17,9 +17,8 @@ namespace backend.Models
         public AuthenticateResponse(User user, string jwtToken, string refreshToken)
         {
             Id = user.Id;
-            UserName = user.Usuario;
-            Domain = user.Dominio;
-            IsAdmin = user.IsAdmin;
+            UserName = user.Name;
+            IsAdmin = user.IsAdmin.Value;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;
         }

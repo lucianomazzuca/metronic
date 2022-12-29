@@ -42,40 +42,37 @@ namespace backend.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
         {
-            using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, _appSettings.Domain))
-            {
-                // validate the credentials
-                bool isValid = pc.ValidateCredentials(model.Username, model.Password, ContextOptions.Negotiate);
+            var user = _context.Users.SingleOrDefault(x => x.Name == model.Username);
 
-                if (isValid == false) return null;
+            // return null if user not found
+            if (user == null) return null;
 
-                var user = _context.Users.SingleOrDefault(x => x.Usuario == model.Username && x.Dominio == _appSettings.Domain);
-                
-                // return null if user not found
-                if (user == null) return null;
+            // verify password
+            bool verified = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+            if (!verified) return null;
 
-                // authentication successful so generate jwt and refresh tokens
-                var jwtToken = generateJwtToken(user);
-                var refreshToken = generateRefreshToken(ipAddress);
+            var jwtToken = generateJwtToken(user);
+            var refreshToken = generateRefreshToken(ipAddress);
 
-                // save refresh token
-                user.RefreshTokens.Add(refreshToken);
-                _context.Update(user);
-                _context.SaveChanges();
+            // save refresh token
+            user.RefreshTokens.Add(refreshToken);
+            _context.Update(user);
+            _context.SaveChanges();
 
-                return new AuthenticateResponse(user, jwtToken, refreshToken.Token);
-            }
+            return new AuthenticateResponse(user, jwtToken, refreshToken.Token);
         }
 
         public AuthenticateResponse RefreshToken(string token, string ipAddress)
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new
-            TransactionOptions { IsolationLevel= IsolationLevel.ReadUncommitted }))
+            TransactionOptions
+            { IsolationLevel = IsolationLevel.ReadUncommitted }))
             {
                 var user = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
-                
+
                 // return null if no user found with token
-                if (user == null) {
+                if (user == null)
+                {
                     return null;
                 }
 
@@ -94,20 +91,20 @@ namespace backend.Services
                 user.RefreshTokens.Add(newRefreshToken);
                 _context.Update(user);
                 _context.SaveChanges();
-                
+
                 scope.Complete();
 
                 // generate new jwt
                 var jwtToken = generateJwtToken(user);
 
                 return new AuthenticateResponse(user, jwtToken, newRefreshToken.Token);
-            }         
+            }
         }
 
-         public bool RevokeToken(string token, string ipAddress)
+        public bool RevokeToken(string token, string ipAddress)
         {
             var user = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
-            
+
             // return false if no user found with token
             if (user == null) return false;
 
@@ -128,7 +125,7 @@ namespace backend.Services
         public IEnumerable<User> GetAll()
         {
             return _context.Users
-                .OrderBy(u => u.Usuario)
+                .OrderBy(u => u.Name)
                 .ToList();
         }
 
@@ -139,16 +136,19 @@ namespace backend.Services
 
         public User Create(UserRequest user)
         {
-            User _user = new User();
-            _user.Usuario = user.Usuario;
-            _user.Dominio = user.Dominio;
-            _user.IsAdmin = user.IsAdmin;
+            // hash password 
+            var hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             
-            _context.Users.Add(_user);  
+            User _user = new User();
+            _user.Name = user.Usuario;
+            _user.Password = hash;
+            _user.IsAdmin = user.IsAdmin;
+
+            _context.Users.Add(_user);
             _context.SaveChanges();
 
-            return _user;            
-        }   
+            return _user;
+        }
 
         public int Update(int id, UserRequest user)
         {
@@ -157,10 +157,10 @@ namespace backend.Services
             _context.Entry(_user).State = EntityState.Modified;
 
             return _context.SaveChanges();
-        }     
+        }
 
 
-         // helper methods
+        // helper methods
 
         private string generateJwtToken(User user)
         {
@@ -168,7 +168,7 @@ namespace backend.Services
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] 
+                Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
@@ -181,7 +181,7 @@ namespace backend.Services
 
         private RefreshToken generateRefreshToken(string ipAddress)
         {
-            using(var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
             {
                 var randomBytes = new byte[64];
                 rngCryptoServiceProvider.GetBytes(randomBytes);

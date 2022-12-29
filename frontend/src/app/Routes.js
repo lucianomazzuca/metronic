@@ -5,8 +5,8 @@
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
 
-import React from "react";
-import { Redirect, Switch, Route } from "react-router-dom";
+ import React, { useEffect,useState } from "react";
+ import { Redirect, Switch, Route } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { Layout } from "../_metronic/layout";
 import BasePage from "./BasePage";

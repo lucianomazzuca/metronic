@@ -1,17 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace backend.Entities
 {
-    public class User
+    public partial class User
     {
-        public int Id { get; set; }
-        public string Usuario { get; set; }
-        public string Dominio { get; set; }
-        public bool IsAdmin { get; set; }
-        public int? BusinessUnitCode { get; set; }
+        public User()
+        {
+            RefreshTokens = new HashSet<RefreshToken>();
+        }
 
-        [JsonIgnore]
-        public List<RefreshToken> RefreshTokens { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public bool? IsAdmin { get; set; }
+
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

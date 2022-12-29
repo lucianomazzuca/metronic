@@ -35,6 +35,7 @@ namespace backend.Controllers
                     return BadRequest(new { message = "Usuario o contraseña incorrectos" });
 
                 setTokenCookie(response.RefreshToken);
+                
 
                 return Ok(response);
             }
@@ -85,28 +86,24 @@ namespace backend.Controllers
         //     return Ok(users);
         // }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
             if (user == null) return NotFound();
 
-            return Ok(user);
+            UserResponse _userReponse = new UserResponse();
+            _userReponse.Name = user.Name;
+            _userReponse.IsAdmin = user.IsAdmin;
+
+            return Ok(_userReponse);
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] UserRequest user)
         {
             var _user = _userService.Create(user);
-            return Ok(_user);
+            return Ok();
         }
 
         [HttpPut("{id}")]
