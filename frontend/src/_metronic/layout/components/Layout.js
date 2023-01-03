@@ -10,7 +10,7 @@ import {Footer} from "./footer/Footer";
 import {LayoutInit} from "./LayoutInit";
 import {SubHeader} from "./subheader/SubHeader";
 import {QuickPanel} from "./extras/offcanvas/QuickPanel";
-// import {QuickUser} from "./extras/offcanvas/QuickUser";
+import {QuickUser} from "./extras/offcanvas/QuickUser";
 import {ScrollTop} from "./extras/ScrollTop";
 import {StickyToolbar} from "./extras/StickyToolbar";
 
@@ -49,7 +49,7 @@ export function Layout({ children }) {
                             id="kt_content"
                             className={`content ${layoutProps.contentCssClasses} d-flex flex-column flex-column-fluid`}
                         >
-                            {/* {layoutProps.subheaderDisplay && <SubHeader/>} */}
+                            {layoutProps.subheaderDisplay && <SubHeader/>}
                             {!layoutProps.contentExtended && (
                                 <div className="d-flex flex-column-fluid">
                                     <div className={layoutProps.contentContainerClasses}>
@@ -69,10 +69,10 @@ export function Layout({ children }) {
                 {/*end::Page*/}
                 
             </div>
-            {/* <QuickUser/> */}
+            <QuickUser/>
             <QuickPanel/>
             <ScrollTop/>
-            <StickyToolbar/>
+            {/* <StickyToolbar/> */}
             {/*end::Main*/}
             <LayoutInit />
         </>
