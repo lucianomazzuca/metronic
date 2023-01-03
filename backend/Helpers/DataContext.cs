@@ -26,7 +26,7 @@ namespace backend.Helpers
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=metronic;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=metronic;Initial Catalog=metronic;User ID=luciano; password=admin");
             }
         }
 
