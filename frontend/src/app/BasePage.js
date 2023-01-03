@@ -5,8 +5,10 @@ import { BuilderPage } from "./pages/BuilderPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import Can from './config/Can';
 import { connect } from 'react-redux'
-import { Users } from "./pages/Users";
 import { Home } from "./modules/Home/Home";
+const ECommercePage = lazy(() =>
+  import("./modules/ECommerce/pages/eCommercePage")
+);
 
 
 const UserProfilepage = lazy(() =>
@@ -32,10 +34,11 @@ function BasePage(props) {
           <Redirect exact from="/" to="/home" />
         }
         <ContentRoute path="/home" component={Home} />
-        <ContentRoute path="/users" component={Users} />
+        {/* <ContentRoute path="/users" component={CustomersPage} /> */}
         <ContentRoute path="/dashboard" component={DashboardPage} />
         <ContentRoute path="/builder" component={BuilderPage} />
         <Route path="/user-profile" component={UserProfilepage} />
+        <Route path="/e-commerce" component={ECommercePage} />
         <Redirect to="error/error-v1" />
       </Switch>
     </Suspense>
