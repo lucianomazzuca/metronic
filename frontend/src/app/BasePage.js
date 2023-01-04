@@ -6,6 +6,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import Can from './config/Can';
 import { connect } from 'react-redux'
 import { Home } from "./modules/Home/Home";
+import Users from './modules/Users'
 const ECommercePage = lazy(() =>
   import("./modules/ECommerce/pages/eCommercePage")
 );
@@ -34,7 +35,7 @@ function BasePage(props) {
           <Redirect exact from="/" to="/home" />
         }
         <ContentRoute path="/home" component={Home} />
-        {/* <ContentRoute path="/users" component={CustomersPage} /> */}
+        <ContentRoute path="/users" component={Users} />
         <ContentRoute path="/dashboard" component={DashboardPage} />
         <ContentRoute path="/builder" component={BuilderPage} />
         <Route path="/user-profile" component={UserProfilepage} />
