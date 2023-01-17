@@ -27,7 +27,7 @@ export function Select({
   const { touched, error } = meta;
   return (
     <>
-      {label && <label>Select {label}</label>}
+      {label && <label>Seleccionar {label}</label>}
       <select
         className={getFieldCSSClasses(touched, error)}
         {...field}

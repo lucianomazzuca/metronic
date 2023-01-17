@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import * as actions from './_redux/Actions';
 import { bindActionCreators } from 'redux';
@@ -8,8 +8,9 @@ import {
     CardHeader,
     CardHeaderToolbar,
 } from "../../../_metronic/_partials/controls";
-import { UsersFilter } from './components/UsersFilter';
-import { UsersTable } from './components/UsersTable';
+import { UserFilter } from './components/UserFilter';
+import { UserTable } from './components/UserTable';
+import { UserEditDialog } from './components/UsersEditDialog';
 
 const users = [
     {
@@ -35,7 +36,8 @@ const users = [
 ]
 
 const User = (props) => {
-    const [ usersData, setUsers ] = React.useState([])
+    const [ usersData, setUsers ] = useState([])
+    const [ showEditDialog, setShowEditDialog ] = useState(false);
 
     const getUsers = async() => {
         let getAllUsers = await props.getUsers(props.buUser);
@@ -62,9 +64,9 @@ const User = (props) => {
                     </CardHeaderToolbar>
                 </CardHeader>
                 <CardBody>
-                    <UsersFilter />
-                    <UsersTable entities={usersData} />
-                    {/* {customersUIProps.ids.length > 0 && <CustomersGrouping />} */}
+                    <UserFilter />
+                    <UserTable entities={usersData} setShowEditDialog={setShowEditDialog}/>
+                    <UserEditDialog show={showEditDialog} setShowEditDialog={setShowEditDialog} />
                 </CardBody>
             </Card>
         </>
