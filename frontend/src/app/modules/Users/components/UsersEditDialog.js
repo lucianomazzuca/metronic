@@ -87,7 +87,7 @@ function UserEditForm({
 }
 
 
-export function UserEditDialog({ id, show, onHide, setShowEditDialog }) {
+export function UserEditDialog({ id, user, show, onHide, setShowEditDialog }) {
 
   // server request for saving user
   const saveUser = (user) => {
@@ -100,7 +100,7 @@ export function UserEditDialog({ id, show, onHide, setShowEditDialog }) {
       onHide={() => setShowEditDialog(false)}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <UserEditForm setShowEditDialog={setShowEditDialog} />
+      <UserEditForm user={user} setShowEditDialog={setShowEditDialog} />
       {/* <UserEditDialogHeader id={id} />
       <UserEditForm
         saveUser={saveUser}

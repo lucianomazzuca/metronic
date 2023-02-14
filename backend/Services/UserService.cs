@@ -153,6 +153,7 @@ namespace backend.Services
         public int Update(int id, UserRequest user)
         {
             User _user = this.GetById(id);
+            _user.Name = user.Usuario;
             _user.IsAdmin = user.IsAdmin;
             _context.Entry(_user).State = EntityState.Modified;
 

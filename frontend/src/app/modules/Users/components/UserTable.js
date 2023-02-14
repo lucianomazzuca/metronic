@@ -47,15 +47,19 @@ import { UserEditDialog } from "./UsersEditDialog";
 //   );
   
 
-export function UserTable({ entities , showEditDialog, setShowEditDialog}) {
+export function UserTable({ entities , showEditDialog, setShowEditDialog, setSelectedUser}) {
+  const openEditDialog = (rowData) => {
+    setShowEditDialog(true)
+    setSelectedUser(rowData)
+  }
 
-  const editButton = () => {
+  const editButton = (rowData) => {
     return (
       <a
       href={() => false}
       title="Edit customer"
       className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-      onClick={() => setShowEditDialog(true)}
+      onClick={() => {openEditDialog(rowData)}}
     >
       <span className="svg-icon svg-icon-md svg-icon-primary">
         <SVG
@@ -120,6 +124,7 @@ export function UserTable({ entities , showEditDialog, setShowEditDialog}) {
         data={entities === null ? [] : entities}
         columns={columns}
       />
+      
     </>
   );
 }

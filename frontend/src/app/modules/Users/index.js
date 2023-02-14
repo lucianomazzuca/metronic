@@ -37,6 +37,7 @@ const users = [
 
 const User = (props) => {
     const [ usersData, setUsers ] = useState([])
+    const [ selectedUser, setSelectedUser ] = useState()
     const [ showEditDialog, setShowEditDialog ] = useState(false);
 
     const getUsers = async() => {
@@ -44,6 +45,7 @@ const User = (props) => {
         setUsers(getAllUsers)
         // setLoading(false)
     }
+
     React.useEffect(() => {
         getUsers()
     },[])
@@ -65,8 +67,8 @@ const User = (props) => {
                 </CardHeader>
                 <CardBody>
                     <UserFilter />
-                    <UserTable entities={usersData} setShowEditDialog={setShowEditDialog}/>
-                    <UserEditDialog show={showEditDialog} setShowEditDialog={setShowEditDialog} />
+                    <UserTable entities={usersData} setShowEditDialog={setShowEditDialog} setSelectedUser={setSelectedUser}/>
+                    <UserEditDialog user={selectedUser} show={showEditDialog} setShowEditDialog={setShowEditDialog} />
                 </CardBody>
             </Card>
         </>

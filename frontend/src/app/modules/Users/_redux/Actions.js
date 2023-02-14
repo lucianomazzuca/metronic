@@ -29,7 +29,7 @@ export const getCustomMarketsFullTree = (buCode) => {
     }
 }
 
-export const updateUserAdministrator = (userId, data) => {
+export const updateUser = (userId, data) => {
     return async function (getState) {
         const userPermissions = await axios.put(`users/${userId}`, data, { headers: { 'Content-Type': 'application/json' } })
         return userPermissions.data;
