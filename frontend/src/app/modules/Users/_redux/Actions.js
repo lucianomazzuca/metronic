@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import swal from 'sweetalert';
 
 export const getUsers = () => {
     return async function (getState) {
@@ -22,35 +21,17 @@ export const updateUserPermissions = (userId, permissions) => {
     }
 }
 
-export const getCustomMarketsFullTree = (buCode) => {
+export const updateUser = (id, data) => {
     return async function (getState) {
-        const tree = await axios.get(`customMarkets/full-tree/${buCode}`)
-        return tree.data;
+        debugger
+        const user = await axios.put(`users/${id}`, data, { headers: { 'Content-Type': 'application/json' } })
+        return user.data;
     }
 }
 
-export const updateUser = (userId, data) => {
+export const createUser = (data) => {
     return async function (getState) {
-        const userPermissions = await axios.put(`users/${userId}`, data, { headers: { 'Content-Type': 'application/json' } })
-        return userPermissions.data;
-    }
-}
-
-export const createUser = (data, buCode) => {
-    return async function (getState) {
-        const createNewUser =
-            await axios.post(`users/${buCode}`, data, { headers: { 'Content-Type': 'application/json' } })
-                .catch(function (error) {
-                    if (error.response) {
-                        // swal({
-                        //     title: "Atención!!",
-                        //     text: error.response.data,
-                        //     icon: "error",
-                        // });
-                    }
-                });
+        const createNewUser = await axios.post(`users`, data, { headers: { 'Content-Type': 'application/json' } })
         return createNewUser;
     }
-
-
 }

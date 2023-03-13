@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
+import { TextField, Checkbox, Grid } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert';
 import {
   Input,
   Select,
@@ -17,97 +19,109 @@ const UserEditSchema = Yup.object().shape({
   isAdmin: Yup.boolean().required("Este campo es requerido"),
 });
 
-function UserEditForm({
-  saveUser,
-  user,
-  actionsLoading,
-  setShowEditDialog,
-}) {
-  return (
-    <>
-      <Formik
-        enableReinitialize={true}
-        initialValues={user}
-        validationSchema={UserEditSchema}
-        onSubmit={(values) => {
-          saveUser(values);
-        }}
-      >
-        {({ handleSubmit }) => (
-          <>
-            <Modal.Body className="overlay overlay-block cursor-default">
-              {actionsLoading && (
-                <div className="overlay-layer bg-transparent">
-                  <div className="spinner spinner-lg spinner-success" />
-                </div>
-              )}
-              <Form className="form form-label-right">
-                <div className="form-group row">
-                  {/* Nombre */}
-                  <div className="col-lg-4">
-                    <Field
-                      name="name"
-                      component={Input}
-                      placeholder="Nombre"
-                      label="Nombre"
-                    />
-                  </div>
-                  {/* Administrador */}
-                  <div className="col-lg-4">
-                    <Select name="isAdmin" label="Admin">
-                      <option value="true">Si</option>
-                      <option value="false">No</option>
-                    </Select>
-                  </div>
-                </div>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <button
-                type="button"
-                onClick={() => setShowEditDialog(false)}
-                className="btn btn-light btn-elevate"
-              >
-                Cancelar
-              </button>
-              <> </>
-              <button
-                type="submit"
-                onClick={() => handleSubmit()}
-                className="btn btn-primary btn-elevate"
-              >
-                Guardar
-              </button>
-            </Modal.Footer>
-          </>
-        )}
-      </Formik>
-    </>
-  );
-}
+export function UserEditDialog({ id, user, show, onHide, setShowEditDialog, updateUser, reload }) {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
+  const closeDialog = () => {
+    formik.resetForm();
+    setShowEditDialog(false)
+  }
 
-export function UserEditDialog({ id, user, show, onHide, setShowEditDialog }) {
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: user.name,
+      isAdmin: user.isAdmin
+    },
+    validationSchema: UserEditSchema,
+    onSubmit: async (values) => {
+      debugger;
+      setError(null)
+      setLoading(true)
+      try {
+        await updateUser(user.id, values);
+        setLoading(false);
+        reload();
+      } catch (e) {
+        setError("Ha ocurrido un error")
+      }
+    }
+  })
 
-  // server request for saving user
-  const saveUser = (user) => {
-  };
+  const editForm = () => {
+    return (
+      <>
+        <div className="form-group row">
+          {/* Nombre */}
+          <div className="col-lg-4">
+            <TextField
+              name="name"
+              placeholder="Nombre"
+              label="Nombre"
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              error={Boolean(formik.errors.name)}
+              helperText={formik.errors.name}
+            />
+          </div>
+          {/* Administrador */}
+          <div className="col-lg-4" style={{ display: 'flex', alignItems: 'end' }}>
+            <label className={(formik.touched.isAdmin && Boolean(formik.errors.isAdmin)) ? 'pf-10 MuiFormLabel-root Mui-error' : 'pf-10'}>Admin</label>
+            <Checkbox
+              label="Admin"
+              name='isAdmin'
+              id='isAdmin'
+              checked={formik.values.isAdmin}
+              onChange={formik.handleChange}
+            />
+          </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <Modal
       size="lg"
       show={show}
-      onHide={() => setShowEditDialog(false)}
+      onHide={() => closeDialog()}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <UserEditForm user={user} setShowEditDialog={setShowEditDialog} />
-      {/* <UserEditDialogHeader id={id} />
-      <UserEditForm
-        saveUser={saveUser}
-        // actionsLoading={actionsLoading}
-        // user={userForEdit || usersUIProps.initUser}
-        onHide={onHide}
-      /> */}
+      <>
+        <Grid container style={{padding:'20px'}}>
+          {/* {actionsLoading && (
+                <div className="overlay-layer bg-transparent">
+                  <div className="spinner spinner-lg spinner-success" />
+                </div>
+              )} */}
+          <form onSubmit={formik.handleSubmit}>
+            {editForm()}
+          </form>
+        </Grid>
+        <Modal.Footer>
+          { error &&
+            <Alert icon={false} severity="error">This is an error alert — check it out!</Alert>
+          }
+          <button
+            type="button"
+            onClick={() => closeDialog()}
+            className="btn btn-light btn-elevate"
+            disabled={loading ? true : false}
+          >
+            Cancelar
+          </button>
+          <> </>
+          <button
+            type="submit"
+            onClick={formik.handleSubmit}
+            className="btn btn-primary btn-elevate"
+            disabled={loading ? true : false}
+          >
+            Guardar
+          </button>
+        </Modal.Footer>
+      </>
     </Modal>
   );
 }

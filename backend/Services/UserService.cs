@@ -26,7 +26,7 @@ namespace backend.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(UserRequest user);
-        int Update(int id, UserRequest user);
+        int Update(int id, UserEdit user);
     }
 
     public class UserService : IUserService
@@ -150,10 +150,10 @@ namespace backend.Services
             return _user;
         }
 
-        public int Update(int id, UserRequest user)
+        public int Update(int id, UserEdit user)
         {
             User _user = this.GetById(id);
-            _user.Name = user.Usuario;
+            _user.Name = user.Name;
             _user.IsAdmin = user.IsAdmin;
             _context.Entry(_user).State = EntityState.Modified;
 

@@ -1,130 +1,71 @@
 import React, { useEffect, useMemo } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, {
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import {
-  getSelectRow,
-  getHandlerTableChange,
-  NoRecordsFoundMessage,
-  PleaseWaitMessage,
-  sortCaret,
-  headerSortingClasses,
-} from "../../../../_metronic/_helpers";
-import { Pagination } from "../../../../_metronic/_partials/controls";
+import MaterialTable from 'material-table'
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../../_metronic/_helpers"
 import { UserEditDialog } from "./UsersEditDialog";
 
-// const ActionsColumnFormatter = ({ setShowEditDialog }) => (
-//     <>
-//       <a
-//         // href={() => false}
-//         title="Edit customer"
-//         className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-//         onClick={setShowEditDialog(true)}
-//       >
-//         <span className="svg-icon svg-icon-md svg-icon-primary">
-//           <SVG
-//             src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
-//           />
-//         </span>
-//       </a>
-//       <> </>
-
-//       <a
-//         // href={() => false}
-//         title="Delete customer"
-//         className="btn btn-icon btn-light btn-hover-danger btn-sm"
-//         // onClick={() => openDeleteCustomerDialog(row.id)}
-//       >
-//         <span className="svg-icon svg-icon-md svg-icon-danger">
-//           <SVG src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")} />
-//         </span>
-//       </a>
-//     </>
-//   );
-  
-
-export function UserTable({ entities , showEditDialog, setShowEditDialog, setSelectedUser}) {
+export function UserTable({ entities, isLoading, setShowEditDialog, setSelectedUser }) {
   const openEditDialog = (rowData) => {
-    setShowEditDialog(true)
+    debugger;
     setSelectedUser(rowData)
+    setShowEditDialog(true)
   }
-
-  const editButton = (rowData) => {
-    return (
-      <a
-      href={() => false}
-      title="Edit customer"
-      className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-      onClick={() => {openEditDialog(rowData)}}
-    >
-      <span className="svg-icon svg-icon-md svg-icon-primary">
-        <SVG
-          src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
-        />
-      </span>
-    </a>
-    )
-  }
-
-  const columns = [
-    {
-      dataField: "id",
-      text: "ID",
-      sort: true,
-    },
-    {
-      dataField: "name",
-      text: "Nombre",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "isAdmin",
-      text: "Perfil Administrador",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "edit",
-      text: "",
-      formatter: editButton,
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
-      style: {
-        width: "10px",
-      },
-    },
-    {
-      dataField: "delete",
-      text: "",
-      formatter: editButton,
-      classes: "text-right pr-0",
-      headerClasses: "text-right pr-3",
-      style: {
-        width: "10px",
-      },
-    },
-  ];
 
   return (
-    <>
-      <BootstrapTable
-        wrapperClasses="table-responsive"
-        bordered={false}
-        classes="table table-head-custom table-vertical-center overflow-hidden"
-        bootstrap4
-        remote
-        keyField='id'
-        data={entities === null ? [] : entities}
-        columns={columns}
-      />
-      
-    </>
+    <MaterialTable
+      title='asdf'
+      style={{boxShadow: 'none', paddingLeft: '0 px !important'}}
+      columns={[
+        { title: 'ID', field: 'id' },
+        { title: 'Nombre', field: 'name' },
+        { title: 'Administrador', field: 'isAdmin' }
+      ]}
+      data={entities}
+      isLoading={isLoading}
+      options={{
+        pageSize: 10,
+        pageSizeOptions: [10, 25, 50, 100],
+        searchFieldAlignment: 'left',
+        actionsColumnIndex: -1,
+        searchFieldStyle: {paddingLeft: '0 px !important'},
+        showTitle: false
+      }}
+      actions={[
+        // {
+        //   icon: 'add',
+        //   tooltip: intl.formatMessage({ id: "USERS.ACTION.CREATE" }),
+        //   isFreeAction: true,
+        //   onClick: () => setDialogAction({ actionType: 'create', dialogVisible: true, user: [] }),
+        //   position: 'toolbar',
+        // },
+        {
+          icon: 'edit',
+          tooltip: 'Editar',
+          onClick: (event, rowData) => openEditDialog(rowData)
+        }
+        // {
+        //   icon: 'visibility',
+        //   tooltip: intl.formatMessage({ id: "USERS.ACTION.PERMISSION" }),
+        //   onClick: (event, rowData) => openPanel(rowData)
+        // }
+      ]}
+      localization={{
+        toolbar: {
+          searchTooltip: 'Buscar',
+          searchPlaceholder: 'Buscar'
+        },
+        header: {
+          actions: ''
+        },
+        pagination: {
+          labelRowsSelect: 'resultados',
+          labelRowsPerPage: 'resultados',
+          labelDisplayedRows: '{from}-{to} de {count}'
+        },
+        body: {
+          emptyDataSourceMessage: '',
+        }
+      }}
+    />
   );
 }

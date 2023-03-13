@@ -8,48 +8,30 @@ import {
     CardHeader,
     CardHeaderToolbar,
 } from "../../../_metronic/_partials/controls";
-import { UserFilter } from './components/UserFilter';
 import { UserTable } from './components/UserTable';
 import { UserEditDialog } from './components/UsersEditDialog';
 
-const users = [
-    {
-        id: 1,
-        name: 'test',
-        isAdmin: true
-    },
-    {
-        id: 2,
-        name: 'test2',
-        isAdmin: true
-    },
-    {
-        id: 3,
-        name: 'test3',
-        isAdmin: true
-    },
-    {
-        id: 4,
-        name: 'test4',
-        isAdmin: true
-    }
-]
-
 const User = (props) => {
+    const [ isLoading, setLoading ] = useState(true)
     const [ usersData, setUsers ] = useState([])
-    const [ selectedUser, setSelectedUser ] = useState()
+    const [ selectedUser, setSelectedUser ] = useState(null)
     const [ showEditDialog, setShowEditDialog ] = useState(false);
 
     const getUsers = async() => {
         let getAllUsers = await props.getUsers(props.buUser);
         setUsers(getAllUsers)
-        // setLoading(false)
+        setLoading(false)
+    }
+
+    const reload = async () => {
+        setLoading(true)
+        setShowEditDialog(false)
+        await getUsers()
     }
 
     React.useEffect(() => {
         getUsers()
-    },[])
-
+    }, [])
 
     return (
         <>
@@ -59,16 +41,17 @@ const User = (props) => {
                         <button
                             type="button"
                             className="btn btn-primary"
-                        // onClick={}
+                        //  onClick={}
                         >
                             Nuevo Usuario
                         </button>
                     </CardHeaderToolbar>
                 </CardHeader>
                 <CardBody>
-                    <UserFilter />
-                    <UserTable entities={usersData} setShowEditDialog={setShowEditDialog} setSelectedUser={setSelectedUser}/>
-                    <UserEditDialog user={selectedUser} show={showEditDialog} setShowEditDialog={setShowEditDialog} />
+                    <UserTable entities={usersData} isLoading={isLoading} setShowEditDialog={setShowEditDialog} setSelectedUser={setSelectedUser}/>
+                    { selectedUser &&
+                        <UserEditDialog user={selectedUser} reload={reload} show={showEditDialog} setShowEditDialog={setShowEditDialog} updateUser={props.updateUser}/>
+                    }
                 </CardBody>
             </Card>
         </>

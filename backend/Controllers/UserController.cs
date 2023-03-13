@@ -115,7 +115,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UserRequest user)
+        public IActionResult Update(int id, [FromBody] UserEdit user)
         {
             try
             {
